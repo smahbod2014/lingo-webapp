@@ -2,6 +2,7 @@ import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
 import "./Lingo.css";
 import settings from "./icons/settings.svg";
+import star from "./icons/star.svg";
 
 const RIGHT_SPOT = 1;
 const WRONG_SPOT = 2;
@@ -68,7 +69,7 @@ export const Lingo: React.FC = () => {
   const [viewingSettings, setViewingSettings] = useState(false);
   const [alertMessage, setAlertMessage] = useState("A");
   const [targetWord, setTargetWord] = useState("");
-  const [difficulty, setDifficulty] = useState("normal");
+  const [difficulty, setDifficulty] = useState(localStorage.getItem("LINGO_DIFFICULTY") || "normal");
   const dictionary = useRef<Set<string>>(new Set<string>());
   const wordList = useRef<string[]>([]);
   const grades = useRef<number[][]>(Array.from(Array(5), () => new Array(5).fill(0)));
@@ -179,13 +180,18 @@ export const Lingo: React.FC = () => {
       setCursorPosition(cursorPosition + 1);
     } else if (key === " ") {
       prepareNewLine(0, true);
-    } else if (key === "Enter" && win) {
+    } else if ((key === "Enter" || key === " ") && win) {
       prepareNewLine(0, true);
+    } else if (key === "ArrowLeft" && cursorPosition > 1) {
+      setCursorPosition(cursorPosition - 1);
+    } else if (key === "ArrowRight" && cursorPosition < 4) {
+      setCursorPosition(cursorPosition + 1);
     }
   };
 
   const changeDifficulty = (newDifficulty: string) => {
     if (newDifficulty !== difficulty) {
+      localStorage.setItem("LINGO_DIFFICULTY", newDifficulty);
       setDifficulty(newDifficulty);
       prepareNewLine(0, true);
     }
@@ -219,7 +225,7 @@ export const Lingo: React.FC = () => {
     <div className="top-level" tabIndex={0} onKeyDown={(e) => handleKeyPress(e.key)} ref={gameRef}>
       <div className="game-header">
         <div>?</div>
-        <div>LINGO</div>
+        <div style={{ color: difficulty === "normal" ? "white" : "crimson" }}>LINGO</div>
         <div onClick={() => setViewingSettings(true)}>
           <img src={settings} alt="settings" />
         </div>
