@@ -124,6 +124,7 @@ export const Lingo: React.FC = () => {
   };
 
   const handleKeyPress = (key: string) => {
+    console.log("key: " + key);
     if (key === "Backspace" && cursorPosition > 1 && !gameOver) {
       guesses[currentLine][cursorPosition - 1] = "";
       setCursorPosition(cursorPosition - 1);
@@ -238,7 +239,7 @@ export const Lingo: React.FC = () => {
               <div
                 className={classNames("cell", grade > 0 && gradeClass, row === currentLine && cursorPosition === column && "selected")}
                 key={i}
-                onClick={clickable ? () => setCursorPosition(i) : undefined}
+                onClick={clickable ? () => setCursorPosition(column) : undefined}
               >
                 {guesses[row][column]}
               </div>
