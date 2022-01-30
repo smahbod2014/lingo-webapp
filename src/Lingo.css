@@ -56,10 +56,10 @@
 }
 
 .keyboard-container {
-  /* margin-top: 300px; */
   display: flex;
   flex-direction: column;
   row-gap: 5px;
+  margin-bottom: 10px;
 }
 
 .keyboard-row {
@@ -154,18 +154,12 @@
 
 @media only screen and (max-width: 600px) {
   .top-level {
-    /* height: 100%; */
     font-size: calc(10px + 2vmax);
   }
 
   .board {
     width: 340px;
     height: 340px;
-  }
-
-  .keyboard-container {
-    /* margin-top: 140px; */
-    margin-bottom: 10px;
   }
 
   .keyboard-row {
