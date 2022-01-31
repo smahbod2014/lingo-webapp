@@ -124,11 +124,21 @@ export const Lingo: React.FC = () => {
     setCursorPosition(1);
   };
 
+  const updateBoard = (row: number, column: number, value: string) => {
+    const copy = [...guesses];
+    copy[row][column] = value;
+    setGuesses(copy);
+  };
+
   const handleKeyPress = (key: string) => {
-    console.log("key: " + key);
-    if (key === "Backspace" && cursorPosition > 1 && !gameOver) {
-      guesses[currentLine][cursorPosition - 1] = "";
-      setCursorPosition(cursorPosition - 1);
+    if (key === "Backspace" && !gameOver) {
+      if (guesses[currentLine][cursorPosition] !== "") {
+        updateBoard(currentLine, cursorPosition, "");
+        setCursorPosition(cursorPosition);
+      } else if (cursorPosition > 1) {
+        updateBoard(currentLine, cursorPosition - 1, "");
+        setCursorPosition(cursorPosition - 1);
+      }
     } else if (key === "Enter" && !gameOver) {
       const word = guesses[currentLine].join("");
       if (word.length === 5) {
@@ -176,11 +186,11 @@ export const Lingo: React.FC = () => {
         }
       }
     } else if (key.match(/^[a-z]$/i) && cursorPosition < 5 && !gameOver) {
-      guesses[currentLine][cursorPosition] = key;
+      updateBoard(currentLine, cursorPosition, key.toLowerCase());
       setCursorPosition(cursorPosition + 1);
     } else if (key === " ") {
       prepareNewLine(0, true);
-    } else if ((key === "Enter" || key === " ") && win) {
+    } else if ((key === "Enter" || key === " ") && gameOver) {
       prepareNewLine(0, true);
     } else if (key === "ArrowLeft" && cursorPosition > 1) {
       setCursorPosition(cursorPosition - 1);
